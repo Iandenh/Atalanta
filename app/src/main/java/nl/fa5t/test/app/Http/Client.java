@@ -21,7 +21,7 @@ public class Client {
 
     public String get(String url) {
         try {
-            return downloadUrl(this.url+'/'+ apiVersion+'/'+url);
+            return downloadUrl(this.url+'/'+url);
         } catch (IOException e) {
             e.printStackTrace();
             return null;

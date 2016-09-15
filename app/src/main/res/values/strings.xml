@@ -2,4 +2,8 @@
     <string name="app_name">Atalanta</string>
     <string name="title_agenda_list">Agendas</string>
     <string name="title_agenda_detail">Agenda Detail</string>
+    <string name="navigation_title">Bardancing Infinity</string>
+    <string name="navigation_agenda">Agenda</string>
+    <string name="navigation_photo">Foto\'s</string>
+    <string name="navigation_settings">Instellingen</string>
 </resources>

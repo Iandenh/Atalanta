@@ -3,6 +3,7 @@ package nl.fa5t.test.app.Agenda;
 import android.app.ActionBar;
 import android.app.Activity;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -120,8 +121,16 @@ public class AgendaDetailFragment extends Fragment {
 //                        Window window = activity.getWindow();
 //                        System.out.println(window.getStatusBarColor());
 //                        window.setStatusBarColor(color);
-                        activity.findViewById(R.id.app_bar).setBackgroundColor(color);
+                        ((CollapsingToolbarLayout) activity.findViewById(R.id.toolbar_layout)).setStatusBarScrim(new ColorDrawable(darker(color)));
                     }
+                }
+                public int darker(int c) {
+
+                    int r = Color.red(c);
+                    int b = Color.blue(c);
+                    int g = Color.green(c);
+
+                    return Color.rgb((int)(r*.7), (int)(g*.7), (int)(b*.7));
                 }
                 public int getDominantColor(Bitmap bitmap) {
                     Bitmap newBitmap = Bitmap.createScaledBitmap(bitmap, 1, 1, true);
