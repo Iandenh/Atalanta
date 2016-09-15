@@ -1,18 +1,28 @@
 package nl.fa5t.test.app.Agenda;
 
+import android.app.ActionBar;
 import android.app.Activity;
+import android.graphics.Bitmap;
+import android.graphics.drawable.ColorDrawable;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.DrawableRequestBuilder;
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.animation.GlideAnimation;
+import com.bumptech.glide.request.target.SimpleTarget;
 
 import java.text.ParseException;
 import java.util.ArrayList;
@@ -59,7 +69,7 @@ public class AgendaDetailFragment extends Fragment {
             // Load the dummy content specified by the fragment
             // arguments. In a real-world scenario, use a Loader
             // to load content from a content provider.
-            new LoadAgendaTask(this.getActivity()).execute(getArguments().getInt(ARG_ITEM_ID));
+            new LoadAgendaTask((AppCompatActivity) this.getActivity()).execute(getArguments().getInt(ARG_ITEM_ID));
 
 
         }
@@ -74,8 +84,8 @@ public class AgendaDetailFragment extends Fragment {
     }
 
     private class LoadAgendaTask extends AsyncTask<Integer, Void, Agenda> {
-        private Activity activity;
-        public LoadAgendaTask(Activity activity) {
+        private AppCompatActivity activity;
+        public LoadAgendaTask(AppCompatActivity activity) {
             this.activity = activity;
         }
 
@@ -95,6 +105,31 @@ public class AgendaDetailFragment extends Fragment {
             if (appBarLayout != null) {
                 appBarLayout.setTitle(mItem.party.title);
             }
+            String url = "https://in-finity.nl/files/agenda/photo/"+mItem.photo_dir+"/big_"+mItem.photo;
+            System.out.println(url);
+            Glide.with(activity).load(url).centerCrop().into((ImageView) activity.findViewById(R.id.backdrop));
+            Glide.with(activity).load(url).asBitmap().into(new SimpleTarget<Bitmap>(200, 200) {
+                @Override
+                public void onResourceReady(Bitmap bitmap, GlideAnimation anim) {
+                    // Do something with bitmap here.
+
+                    int color = getDominantColor(bitmap);
+                    ((CollapsingToolbarLayout) activity.findViewById(R.id.toolbar_layout)).setContentScrim(new ColorDrawable(color));
+
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+//                        Window window = activity.getWindow();
+//                        System.out.println(window.getStatusBarColor());
+//                        window.setStatusBarColor(color);
+                        activity.findViewById(R.id.app_bar).setBackgroundColor(color);
+                    }
+                }
+                public int getDominantColor(Bitmap bitmap) {
+                    Bitmap newBitmap = Bitmap.createScaledBitmap(bitmap, 1, 1, true);
+                    final int color = newBitmap.getPixel(0, 0);
+                    newBitmap.recycle();
+                    return color;
+                }
+            });
             ((TextView) rootView.findViewById(R.id.desc)).setText(mItem.desc);
             ((TextView) rootView.findViewById(R.id.body)).setText(mItem.body);
         }

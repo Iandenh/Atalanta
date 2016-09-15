@@ -47,7 +47,6 @@ public class AgendaDetailActivity extends AppCompatActivity {
             }
         });
 
-        Glide.with(this).load("https://static.pexels.com/photos/3247/nature-forest-industry-rails.jpg").centerCrop().into(backdropImg);
         // Show the Up button in the action bar.
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {

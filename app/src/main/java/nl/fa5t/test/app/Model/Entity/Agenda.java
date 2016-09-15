@@ -14,7 +14,7 @@ public class Agenda {
     public double price;
     public double price_height;
     public String photo;
-    public String photoDir;
+    public String photo_dir;
 
 
 }
