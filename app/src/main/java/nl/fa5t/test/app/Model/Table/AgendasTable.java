@@ -8,5 +8,6 @@ import nl.fa5t.test.app.Model.Entity.Agenda;
 public class AgendasTable extends Table<Agenda> {
     public AgendasTable() {
         super();
+        singular = "agenda";
     }
 }

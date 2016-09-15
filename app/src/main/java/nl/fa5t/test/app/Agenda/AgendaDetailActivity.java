@@ -10,7 +10,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.app.ActionBar;
 import android.support.v4.app.NavUtils;
 import android.view.MenuItem;
+import android.widget.ImageView;
 
+import com.bumptech.glide.Glide;
+
+import butterknife.Bind;
 import nl.fa5t.test.app.Model.Table.AgendasTable;
 import nl.fa5t.test.app.R;
 
@@ -22,11 +26,16 @@ import nl.fa5t.test.app.R;
  */
 public class AgendaDetailActivity extends AppCompatActivity {
 
+
+    @Bind(R.id.backdrop)
+    ImageView backdropImg;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_agenda_detail);
         Toolbar toolbar = (Toolbar) findViewById(R.id.detail_toolbar);
+        ImageView backdropImg = (ImageView) findViewById(R.id.backdrop);
         setSupportActionBar(toolbar);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
@@ -38,6 +47,7 @@ public class AgendaDetailActivity extends AppCompatActivity {
             }
         });
 
+        Glide.with(this).load("https://static.pexels.com/photos/3247/nature-forest-industry-rails.jpg").centerCrop().into(backdropImg);
         // Show the Up button in the action bar.
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
@@ -57,8 +67,8 @@ public class AgendaDetailActivity extends AppCompatActivity {
             // Create the detail fragment and add it to the activity
             // using a fragment transaction.
             Bundle arguments = new Bundle();
-            arguments.putString(AgendaDetailFragment.ARG_ITEM_ID,
-                    getIntent().getStringExtra(AgendaDetailFragment.ARG_ITEM_ID));
+            arguments.putInt(AgendaDetailFragment.ARG_ITEM_ID,
+                    getIntent().getIntExtra(AgendaDetailFragment.ARG_ITEM_ID,0));
             AgendaDetailFragment fragment = new AgendaDetailFragment();
             fragment.setArguments(arguments);
             getSupportFragmentManager().beginTransaction()

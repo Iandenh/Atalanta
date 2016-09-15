@@ -40,28 +40,38 @@ public class AgendaListActivity extends AppCompatActivity {
      */
     private boolean mTwoPane;
     protected ArrayList<Agenda> agendas;
-    private class DownloadImageTask extends AsyncTask<String, Void, ArrayList<Agenda>> {
+    private class LoadAgendaTask extends AsyncTask<String, Void, ArrayList<Agenda>> {
         /** The system calls this to perform work in a worker thread and
          * delivers it the parameters given to AsyncTask.execute() */
         protected ArrayList<Agenda> doInBackground(String... urls) {
-            AgendasTable test = new AgendasTable();
-            return test.getAll(Agenda.class);
+            AgendasTable agendasTable = new AgendasTable();
+            return agendasTable.getAll(Agenda.class);
         }
 
         /** The system calls this to perform work in the UI thread and delivers
          * the result from doInBackground() */
         protected void onPostExecute(ArrayList<Agenda> result) {
-            ArrayList<Agenda> test = result;
-            for (Agenda agenda: result){
-                System.out.println(agenda.party.title);
+            agendas = result;
+
+            View recyclerView = findViewById(R.id.agenda_list);
+            assert recyclerView != null;
+            setupRecyclerView((RecyclerView) recyclerView);
+
+            if (findViewById(R.id.agenda_detail_container) != null) {
+                // The detail container view will be present only in the
+                // large-screen layouts (res/values-w900dp).
+                // If this view is present, then the
+                // activity should be in two-pane mode.
+                mTwoPane = true;
             }
+
         }
     }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_agenda_list);
-        new DownloadImageTask().execute("http://example.com/image.png");
+        new LoadAgendaTask().execute();
 
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -77,29 +87,19 @@ public class AgendaListActivity extends AppCompatActivity {
             }
         });
 
-        View recyclerView = findViewById(R.id.agenda_list);
-        assert recyclerView != null;
-        setupRecyclerView((RecyclerView) recyclerView);
 
-        if (findViewById(R.id.agenda_detail_container) != null) {
-            // The detail container view will be present only in the
-            // large-screen layouts (res/values-w900dp).
-            // If this view is present, then the
-            // activity should be in two-pane mode.
-            mTwoPane = true;
-        }
     }
 
     private void setupRecyclerView(@NonNull RecyclerView recyclerView) {
-        recyclerView.setAdapter(new SimpleItemRecyclerViewAdapter(DummyContent.ITEMS));
+        recyclerView.setAdapter(new AgendaRecyclerViewAdapter(agendas));
     }
 
-    public class SimpleItemRecyclerViewAdapter
-            extends RecyclerView.Adapter<SimpleItemRecyclerViewAdapter.ViewHolder> {
+    public class AgendaRecyclerViewAdapter
+            extends RecyclerView.Adapter<AgendaRecyclerViewAdapter.ViewHolder> {
 
-        private final List<DummyContent.DummyItem> mValues;
+        private final ArrayList<Agenda> mValues;
 
-        public SimpleItemRecyclerViewAdapter(List<DummyContent.DummyItem> items) {
+        public AgendaRecyclerViewAdapter(ArrayList<Agenda> items) {
             mValues = items;
         }
 
@@ -113,15 +113,29 @@ public class AgendaListActivity extends AppCompatActivity {
         @Override
         public void onBindViewHolder(final ViewHolder holder, int position) {
             holder.mItem = mValues.get(position);
-            holder.mIdView.setText(mValues.get(position).id);
-            holder.mContentView.setText(mValues.get(position).content);
+            System.out.println(holder.mItem.id);
+            holder.mtitleView.setText(mValues.get(position).party.title);
+
+            String price = String.format( "%.2f", mValues.get(position).price );
+            String price_height = String.format( "%.2f", mValues.get(position).price_height );
+            if (!price.equals("0.00")) {
+                if (!price_height.equals("0.00")) {
+                    price = "€" + price + " - €" + price_height;
+                } else {
+                    price = "€" + price;
+                }
+
+            } else {
+                price = "Gratis";
+            }
+            holder.mPriceView.setText(price);
 
             holder.mView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     if (mTwoPane) {
                         Bundle arguments = new Bundle();
-                        arguments.putString(AgendaDetailFragment.ARG_ITEM_ID, holder.mItem.id);
+                        arguments.putInt(AgendaDetailFragment.ARG_ITEM_ID, holder.mItem.id);
                         AgendaDetailFragment fragment = new AgendaDetailFragment();
                         fragment.setArguments(arguments);
                         getSupportFragmentManager().beginTransaction()
@@ -145,20 +159,22 @@ public class AgendaListActivity extends AppCompatActivity {
 
         public class ViewHolder extends RecyclerView.ViewHolder {
             public final View mView;
-            public final TextView mIdView;
-            public final TextView mContentView;
-            public DummyContent.DummyItem mItem;
+            public final TextView mPriceView;
+            public final TextView mtitleView;
+            public final TextView mdateView;
+            public Agenda mItem;
 
             public ViewHolder(View view) {
                 super(view);
                 mView = view;
-                mIdView = (TextView) view.findViewById(R.id.id);
-                mContentView = (TextView) view.findViewById(R.id.content);
+                mPriceView = (TextView) view.findViewById(R.id.price);
+                mtitleView = (TextView) view.findViewById(R.id.title);
+                mdateView = (TextView) view.findViewById(R.id.title);
             }
 
             @Override
             public String toString() {
-                return super.toString() + " '" + mContentView.getText() + "'";
+                return super.toString() + " '" + mtitleView.getText() + "'";
             }
         }
     }

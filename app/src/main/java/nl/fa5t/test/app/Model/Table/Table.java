@@ -16,15 +16,16 @@ import nl.fa5t.test.app.Http.Client;
  */
 abstract public class Table<T> {
     protected Client client;
-    protected String url = this.getClass().getSimpleName().replace("Table", "").toLowerCase()+".json";
+    protected String plural = this.getClass().getSimpleName().replace("Table", "").toLowerCase();
+    protected String singular;
 
     public Table() {
         client = new Client();
 
     }
 
-    public ArrayList<T> getAll(Class<T> model){
-        String result = client.get(url);
+    public ArrayList<T> getAll(Class<T> model) {
+        String result = client.get(plural + ".json");
 
         try {
             JSONObject o = new JSONObject(result);
@@ -45,5 +46,21 @@ abstract public class Table<T> {
         }
 
 
+    }
+
+    public T get(int id, Class<T> model) {
+        String result = client.get(plural + "/view/" + id + ".json");
+        try {
+            JSONObject o = new JSONObject(result);
+            JSONObject a = o.getJSONObject(singular);
+            Gson gson = new Gson();
+            T obj = gson.fromJson(a.toString(), model);
+            return obj;
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+
+        return null;
     }
 }

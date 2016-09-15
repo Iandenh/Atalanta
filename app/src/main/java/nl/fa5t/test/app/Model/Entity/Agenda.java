@@ -12,7 +12,7 @@ public class Agenda {
     public String desc;
     public String body;
     public double price;
-    public double priceHeight;
+    public double price_height;
     public String photo;
     public String photoDir;
 
