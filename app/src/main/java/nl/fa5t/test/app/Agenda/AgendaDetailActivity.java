@@ -2,9 +2,7 @@ package nl.fa5t.test.app.Agenda;
 
 import android.app.ActivityOptions;
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
@@ -15,12 +13,13 @@ import android.view.MenuItem;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.animation.GlideAnimation;
+import com.bumptech.glide.request.target.SimpleTarget;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import nl.fa5t.test.app.Model.Entity.Agenda;
-import nl.fa5t.test.app.Model.Table.AgendasTable;
 import nl.fa5t.test.app.R;
 
 /**
@@ -50,17 +49,30 @@ public class AgendaDetailActivity extends AppCompatActivity {
 
     @OnClick(R.id.backdrop)
     public void onBackdropClick(View view) {
-        Intent intent = new Intent(this, FullscreenActivity.class);
-        intent.putExtra("agendaObject", agenda);
-        Bundle bundle = null;
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
-            ActivityOptions options = ActivityOptions
-                    .makeSceneTransitionAnimation(AgendaDetailActivity.this, backdropImg, "imageTrans");
-            bundle = options.toBundle();
-            AgendaDetailActivity.this.startActivity(intent, bundle);
-        } else {
-            AgendaDetailActivity.this.startActivity(intent);
+        if (agenda != null) {
+
+
+            SimpleTarget target = new SimpleTarget() {
+                @Override
+                public void onResourceReady(Object resource, GlideAnimation glideAnimation) {
+                    Intent intent = new Intent(AgendaDetailActivity.this, FullscreenActivity.class);
+                    intent.putExtra("agendaObject", agenda);
+                    Bundle bundle = null;
+                    if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
+                        ActivityOptions options = ActivityOptions
+                                .makeSceneTransitionAnimation(AgendaDetailActivity.this, backdropImg, "imageTrans");
+                        bundle = options.toBundle();
+                        startActivity(intent, bundle);
+                    } else {
+                        startActivity(intent);
+                    }
+                }
+            };
+
+            Glide.with(this).load("https://in-finity.nl/files/agenda/photo/" + agenda.photo_dir + "/big_" + agenda.photo).into(target);
+
         }
+
     }
 
 

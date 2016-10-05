@@ -1,38 +1,26 @@
 package nl.fa5t.test.app.Agenda;
 
-import android.app.ActionBar;
-import android.app.Activity;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.AsyncTask;
 import android.os.Build;
-import android.support.design.widget.CollapsingToolbarLayout;
 import android.os.Bundle;
+import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v4.app.Fragment;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.bumptech.glide.DrawableRequestBuilder;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
 
-import java.text.ParseException;
-import java.util.ArrayList;
-
-import butterknife.BindView;
-import nl.fa5t.test.app.Helper;
 import nl.fa5t.test.app.Model.Entity.Agenda;
 import nl.fa5t.test.app.Model.Table.AgendasTable;
 import nl.fa5t.test.app.R;
-import nl.fa5t.test.app.Agenda.dummy.DummyContent;
 
 /**
  * A fragment representing a single Agenda detail screen.
@@ -112,7 +100,7 @@ public class AgendaDetailFragment extends Fragment {
                 appBarLayout.setTitle(mItem.party.title);
             }
             String url = "https://in-finity.nl/files/agenda/photo/" + mItem.photo_dir + "/big_" + mItem.photo;
-            Glide.with(activity).load(url).into((ImageView) activity.findViewById(R.id.backdrop));
+
             Glide.with(activity).load(url).asBitmap().into(new SimpleTarget<Bitmap>(200, 200) {
                 @Override
                 public void onResourceReady(Bitmap bitmap, GlideAnimation anim) {
@@ -142,6 +130,7 @@ public class AgendaDetailFragment extends Fragment {
                     return color;
                 }
             });
+            Glide.with(activity).load(url).into((ImageView) activity.findViewById(R.id.backdrop));
             ((TextView) rootView.findViewById(R.id.desc)).setText(mItem.desc);
             ((TextView) rootView.findViewById(R.id.body)).setText(mItem.body);
         }
