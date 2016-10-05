@@ -5,6 +5,9 @@
     android:orientation="vertical"
     android:padding="10dp"
     android:paddingLeft="10dp"
+    android:clickable="true"
+    android:focusable="true"
+    android:background="?attr/selectableItemBackground"
     android:paddingRight="10dp" >
 
 

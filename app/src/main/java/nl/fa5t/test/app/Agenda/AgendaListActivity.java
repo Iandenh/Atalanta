@@ -18,6 +18,7 @@ import android.widget.TextView;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
+import nl.fa5t.test.app.BaseAppCompatActivity;
 import nl.fa5t.test.app.Model.Entity.Agenda;
 import nl.fa5t.test.app.Model.Table.AgendasTable;
 import nl.fa5t.test.app.R;
@@ -30,7 +31,7 @@ import nl.fa5t.test.app.R;
  * item details. On tablets, the activity presents the list of items and
  * item details side-by-side using two vertical panes.
  */
-public class AgendaListActivity extends AppCompatActivity {
+public class AgendaListActivity extends BaseAppCompatActivity {
 
     /**
      * Whether or not the activity is in two-pane mode, i.e. running on a tablet
@@ -69,6 +70,7 @@ public class AgendaListActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_agenda_list);
+        navigationStart();
         new LoadAgendaTask().execute();
 
 

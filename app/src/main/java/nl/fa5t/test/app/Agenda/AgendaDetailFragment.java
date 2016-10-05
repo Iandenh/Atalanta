@@ -135,4 +135,5 @@ public class AgendaDetailFragment extends Fragment {
             ((TextView) rootView.findViewById(R.id.body)).setText(mItem.body);
         }
     }
+
 }

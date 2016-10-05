@@ -9,8 +9,8 @@ android {
         applicationId "nl.fa5t.test.app"
         minSdkVersion 14
         targetSdkVersion 23
-        versionCode 1
-        versionName "1.0"
+        versionCode 34
+        versionName "2.0-alpha"
     }
     buildTypes {
         release {

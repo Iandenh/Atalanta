@@ -19,6 +19,8 @@ import com.bumptech.glide.request.target.SimpleTarget;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import nl.fa5t.test.app.BaseAppCompatActivity;
+import nl.fa5t.test.app.Gallery.GalleryActivity;
 import nl.fa5t.test.app.Model.Entity.Agenda;
 import nl.fa5t.test.app.R;
 
@@ -28,7 +30,7 @@ import nl.fa5t.test.app.R;
  * item details are presented side-by-side with a list of items
  * in a {@link AgendaListActivity}.
  */
-public class AgendaDetailActivity extends AppCompatActivity {
+public class AgendaDetailActivity extends BaseAppCompatActivity {
 
 
     protected Agenda agenda = null;
@@ -85,6 +87,7 @@ public class AgendaDetailActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_agenda_detail);
         ButterKnife.bind(this);
+        navigationStart();
         System.out.println(toolbar);
         setSupportActionBar(toolbar);
 
@@ -121,6 +124,7 @@ public class AgendaDetailActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
+
         if (id == android.R.id.home) {
             // This ID represents the Home or Up button. In the case of this
             // activity, the Up button is shown. Use NavUtils to allow users
@@ -131,6 +135,14 @@ public class AgendaDetailActivity extends AppCompatActivity {
             //
             NavUtils.navigateUpTo(this, new Intent(this, AgendaListActivity.class));
             return true;
+        }
+        if(id == R.id.nav_agenda) {
+            Intent intent = new Intent(this, AgendaListActivity.class);
+            startActivity(intent);
+        }
+        if(id == R.id.nav_photo) {
+            Intent intent = new Intent(this, GalleryActivity.class);
+            startActivity(intent);
         }
         return super.onOptionsItemSelected(item);
     }

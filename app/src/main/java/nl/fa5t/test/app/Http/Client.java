@@ -16,7 +16,7 @@ import java.net.URL;
  * Created by ian on 14-9-16.
  */
 public class Client {
-    protected String url ="http://10.0.2.2:8765";
+    protected String url ="https://orion.in-finity.nl";
     protected String apiVersion ="apiv1";
 
     public String get(String url) {

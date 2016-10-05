@@ -9,12 +9,14 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.graphics.Palette;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -34,6 +36,8 @@ import java.util.ArrayList;
 
 import nl.fa5t.test.app.Agenda.AgendaDetailActivity;
 import nl.fa5t.test.app.Agenda.AgendaDetailFragment;
+import nl.fa5t.test.app.Agenda.AgendaListActivity;
+import nl.fa5t.test.app.BaseAppCompatActivity;
 import nl.fa5t.test.app.Model.Entity.Agenda;
 import nl.fa5t.test.app.Model.Entity.Album;
 import nl.fa5t.test.app.Model.Entity.Image;
@@ -43,7 +47,7 @@ import nl.fa5t.test.app.R;
 
 import com.squareup.picasso.Callback;
 
-public class GalleryActivity extends AppCompatActivity implements ImageGalleryAdapter.ImageThumbnailLoader, FullScreenImageGalleryAdapter.FullScreenImageLoader {
+public class GalleryActivity extends BaseAppCompatActivity implements ImageGalleryAdapter.ImageThumbnailLoader, FullScreenImageGalleryAdapter.FullScreenImageLoader {
 
     protected ArrayList<Album> albums;
     private PaletteColorType paletteColorType;
@@ -52,6 +56,7 @@ public class GalleryActivity extends AppCompatActivity implements ImageGalleryAd
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_gallery);
+        navigationStart();
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -331,5 +336,23 @@ public class GalleryActivity extends AppCompatActivity implements ImageGalleryAd
         }
 
         return bgColor;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+
+        if (id == android.R.id.home) {
+            // This ID represents the Home or Up button. In the case of this
+            // activity, the Up button is shown. Use NavUtils to allow users
+            // to navigate up one level in the application structure. For
+            // more details, see the Navigation pattern on Android Design:
+            //
+            // http://developer.android.com/design/patterns/navigation.html#up-vs-back
+            //
+            NavUtils.navigateUpTo(this, new Intent(this, AgendaListActivity.class));
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }
