@@ -6,4 +6,8 @@
     <string name="navigation_agenda">Agenda</string>
     <string name="navigation_photo">Foto\'s</string>
     <string name="navigation_settings">Instellingen</string>
+
+    <string name="title_activity_fullscreen">FullscreenActivity</string>
+    <string name="dummy_button">Dummy Button</string>
+    <string name="dummy_content">DUMMY\nCONTENT</string>
 </resources>

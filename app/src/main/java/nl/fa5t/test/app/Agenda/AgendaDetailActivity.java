@@ -1,6 +1,8 @@
 package nl.fa5t.test.app.Agenda;
 
+import android.app.ActivityOptions;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -14,7 +16,10 @@ import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
 
-import butterknife.Bind;
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
+import nl.fa5t.test.app.Model.Entity.Agenda;
 import nl.fa5t.test.app.Model.Table.AgendasTable;
 import nl.fa5t.test.app.R;
 
@@ -27,25 +32,50 @@ import nl.fa5t.test.app.R;
 public class AgendaDetailActivity extends AppCompatActivity {
 
 
-    @Bind(R.id.backdrop)
+    protected Agenda agenda = null;
+
+    @BindView(R.id.backdrop)
     ImageView backdropImg;
+
+    @BindView(R.id.detail_toolbar)
+    Toolbar toolbar;
+
+
+    @OnClick(R.id.fab)
+    public void onButtonClick(View view) {
+
+        Snackbar.make(view, "Replace with your own detail action", Snackbar.LENGTH_LONG)
+                .setAction("Action", null).show();
+    }
+
+    @OnClick(R.id.backdrop)
+    public void onBackdropClick(View view) {
+        Intent intent = new Intent(this, FullscreenActivity.class);
+        intent.putExtra("agendaObject", agenda);
+        Bundle bundle = null;
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
+            ActivityOptions options = ActivityOptions
+                    .makeSceneTransitionAnimation(AgendaDetailActivity.this, backdropImg, "imageTrans");
+            bundle = options.toBundle();
+            AgendaDetailActivity.this.startActivity(intent, bundle);
+        } else {
+            AgendaDetailActivity.this.startActivity(intent);
+        }
+    }
+
+
+    public void setAgenda(Agenda agenda) {
+        this.agenda = agenda;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_agenda_detail);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.detail_toolbar);
-        ImageView backdropImg = (ImageView) findViewById(R.id.backdrop);
+        ButterKnife.bind(this);
+        System.out.println(toolbar);
         setSupportActionBar(toolbar);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own detail action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
 
         // Show the Up button in the action bar.
         ActionBar actionBar = getSupportActionBar();
@@ -67,7 +97,7 @@ public class AgendaDetailActivity extends AppCompatActivity {
             // using a fragment transaction.
             Bundle arguments = new Bundle();
             arguments.putInt(AgendaDetailFragment.ARG_ITEM_ID,
-                    getIntent().getIntExtra(AgendaDetailFragment.ARG_ITEM_ID,0));
+                    getIntent().getIntExtra(AgendaDetailFragment.ARG_ITEM_ID, 0));
             AgendaDetailFragment fragment = new AgendaDetailFragment();
             fragment.setArguments(arguments);
             getSupportFragmentManager().beginTransaction()

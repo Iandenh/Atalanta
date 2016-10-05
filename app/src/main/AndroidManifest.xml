@@ -3,6 +3,7 @@
     package="nl.fa5t.test.app">
 
     <uses-permission android:name="android.permission.INTERNET" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -28,6 +29,11 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="nl.fa5t.test.app.Agenda.AgendaListActivity" />
         </activity>
+        <activity
+            android:name=".Agenda.FullscreenActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:label="@string/title_activity_fullscreen"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>

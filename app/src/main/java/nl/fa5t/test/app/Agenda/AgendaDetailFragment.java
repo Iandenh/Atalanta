@@ -11,7 +11,6 @@ import android.support.design.widget.CollapsingToolbarLayout;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -28,7 +27,7 @@ import com.bumptech.glide.request.target.SimpleTarget;
 import java.text.ParseException;
 import java.util.ArrayList;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import nl.fa5t.test.app.Helper;
 import nl.fa5t.test.app.Model.Entity.Agenda;
 import nl.fa5t.test.app.Model.Table.AgendasTable;
@@ -70,7 +69,7 @@ public class AgendaDetailFragment extends Fragment {
             // Load the dummy content specified by the fragment
             // arguments. In a real-world scenario, use a Loader
             // to load content from a content provider.
-            new LoadAgendaTask((AppCompatActivity) this.getActivity()).execute(getArguments().getInt(ARG_ITEM_ID));
+            new LoadAgendaTask((AgendaDetailActivity) this.getActivity()).execute(getArguments().getInt(ARG_ITEM_ID));
 
 
         }
@@ -85,30 +84,35 @@ public class AgendaDetailFragment extends Fragment {
     }
 
     private class LoadAgendaTask extends AsyncTask<Integer, Void, Agenda> {
-        private AppCompatActivity activity;
-        public LoadAgendaTask(AppCompatActivity activity) {
+        private AgendaDetailActivity activity;
+
+        public LoadAgendaTask(AgendaDetailActivity activity) {
             this.activity = activity;
         }
 
-        /** The system calls this to perform work in a worker thread and
-         * delivers it the parameters given to AsyncTask.execute() */
+        /**
+         * The system calls this to perform work in a worker thread and
+         * delivers it the parameters given to AsyncTask.execute()
+         */
         protected Agenda doInBackground(Integer... id) {
             AgendasTable agendasTable = new AgendasTable();
             return agendasTable.get(id[0], Agenda.class);
         }
 
-        /** The system calls this to perform work in the UI thread and delivers
-         * the result from doInBackground() */
+        /**
+         * The system calls this to perform work in the UI thread and delivers
+         * the result from doInBackground()
+         */
         protected void onPostExecute(Agenda result) {
 
             mItem = result;
+            activity.setAgenda(result);
             CollapsingToolbarLayout appBarLayout = (CollapsingToolbarLayout) activity.findViewById(R.id.toolbar_layout);
             if (appBarLayout != null) {
                 appBarLayout.setTitle(mItem.party.title);
             }
-            String url = "https://in-finity.nl/files/agenda/photo/"+mItem.photo_dir+"/big_"+mItem.photo;
-            System.out.println(url);
-            Glide.with(activity).load(url).centerCrop().into((ImageView) activity.findViewById(R.id.backdrop));
+            String url = "https://in-finity.nl/files/agenda/photo/" + mItem.photo_dir + "/big_" + mItem.photo;
+            Glide.with(activity).load(url).into((ImageView) activity.findViewById(R.id.backdrop));
             Glide.with(activity).load(url).asBitmap().into(new SimpleTarget<Bitmap>(200, 200) {
                 @Override
                 public void onResourceReady(Bitmap bitmap, GlideAnimation anim) {
@@ -118,20 +122,19 @@ public class AgendaDetailFragment extends Fragment {
                     ((CollapsingToolbarLayout) activity.findViewById(R.id.toolbar_layout)).setContentScrim(new ColorDrawable(color));
 
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-//                        Window window = activity.getWindow();
-//                        System.out.println(window.getStatusBarColor());
-//                        window.setStatusBarColor(color);
                         ((CollapsingToolbarLayout) activity.findViewById(R.id.toolbar_layout)).setStatusBarScrim(new ColorDrawable(darker(color)));
                     }
                 }
+
                 public int darker(int c) {
 
                     int r = Color.red(c);
                     int b = Color.blue(c);
                     int g = Color.green(c);
 
-                    return Color.rgb((int)(r*.7), (int)(g*.7), (int)(b*.7));
+                    return Color.rgb((int) (r * .7), (int) (g * .7), (int) (b * .7));
                 }
+
                 public int getDominantColor(Bitmap bitmap) {
                     Bitmap newBitmap = Bitmap.createScaledBitmap(bitmap, 1, 1, true);
                     final int color = newBitmap.getPixel(0, 0);

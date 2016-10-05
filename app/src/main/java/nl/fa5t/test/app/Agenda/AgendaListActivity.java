@@ -21,6 +21,7 @@ import nl.fa5t.test.app.R;
 
 import nl.fa5t.test.app.Agenda.dummy.DummyContent;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -130,6 +131,10 @@ public class AgendaListActivity extends AppCompatActivity {
             }
             holder.mPriceView.setText(price);
 
+            SimpleDateFormat format = new SimpleDateFormat("EEEE d MMMM");
+            String dateString = format.format(mValues.get(position).date);
+            holder.mdateView.setText(dateString);
+
             holder.mView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -169,7 +174,7 @@ public class AgendaListActivity extends AppCompatActivity {
                 mView = view;
                 mPriceView = (TextView) view.findViewById(R.id.price);
                 mtitleView = (TextView) view.findViewById(R.id.title);
-                mdateView = (TextView) view.findViewById(R.id.title);
+                mdateView = (TextView) view.findViewById(R.id.date);
             }
 
             @Override
