@@ -2,6 +2,7 @@ package nl.fa5t.test.app.Gallery;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.AsyncTask;
@@ -19,8 +20,10 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.etiennelawlor.imagegallery.library.ImageGalleryFragment;
@@ -34,6 +37,9 @@ import com.squareup.picasso.Picasso;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
 import nl.fa5t.test.app.Agenda.AgendaDetailActivity;
 import nl.fa5t.test.app.Agenda.AgendaDetailFragment;
 import nl.fa5t.test.app.Agenda.AgendaListActivity;
@@ -52,11 +58,28 @@ public class GalleryActivity extends BaseAppCompatActivity implements ImageGalle
     protected ArrayList<Album> albums;
     private PaletteColorType paletteColorType;
 
+    @BindView(R.id.progress_bar)
+    ProgressBar mProgressBar;
+
+    @BindView(R.id.NotFoundLayout)
+    FrameLayout NotFoundLayout;
+
+    @OnClick(R.id.retryButton)
+    public void onButtonClick(View view) {
+
+
+        NotFoundLayout.setVisibility(View.GONE);
+        mProgressBar.setVisibility(View.VISIBLE);
+        new LoadAlbumTask().execute();
+
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_gallery);
         navigationStart();
+        ButterKnife.bind(this);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -83,8 +106,11 @@ public class GalleryActivity extends BaseAppCompatActivity implements ImageGalle
          */
         protected ArrayList<Album> doInBackground(String... urls) {
             AlbumsTable albumsTable = new AlbumsTable();
-
-            return albumsTable.getAll(Album.class);
+            try {
+                return albumsTable.getAll(Album.class);
+            } catch (Resources.NotFoundException e) {
+                return null;
+            }
         }
 
         /**
@@ -92,12 +118,19 @@ public class GalleryActivity extends BaseAppCompatActivity implements ImageGalle
          * the result from doInBackground()
          */
         protected void onPostExecute(ArrayList<Album> result) {
-            albums = result;
+            if (result == null) {
+                mProgressBar.setVisibility(View.GONE);
+                NotFoundLayout.setVisibility(View.VISIBLE);
+            } else {
 
-            View recyclerView = findViewById(R.id.agenda_list);
-            assert recyclerView != null;
-            setupRecyclerView((RecyclerView) recyclerView);
+                albums = result;
 
+                View recyclerView = findViewById(R.id.agenda_list);
+                assert recyclerView != null;
+                setupRecyclerView((RecyclerView) recyclerView);
+                mProgressBar.setVisibility(View.GONE);
+                recyclerView.setVisibility(View.VISIBLE);
+            }
         }
     }
 
@@ -220,8 +253,9 @@ public class GalleryActivity extends BaseAppCompatActivity implements ImageGalle
             iv.setImageDrawable(null);
         }
     }
+
     // region Helper Methods
-    private void applyPalette(Palette palette, LinearLayout bgLinearLayout){
+    private void applyPalette(Palette palette, LinearLayout bgLinearLayout) {
         int bgColor = getBackgroundColor(palette);
         if (bgColor != -1)
             bgLinearLayout.setBackgroundColor(bgColor);

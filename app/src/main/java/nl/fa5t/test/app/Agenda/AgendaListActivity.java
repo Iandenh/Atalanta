@@ -2,6 +2,7 @@ package nl.fa5t.test.app.Agenda;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -13,11 +14,16 @@ import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
 import nl.fa5t.test.app.BaseAppCompatActivity;
 import nl.fa5t.test.app.Model.Entity.Agenda;
 import nl.fa5t.test.app.Model.Table.AgendasTable;
@@ -39,38 +45,76 @@ public class AgendaListActivity extends BaseAppCompatActivity {
      */
     private boolean mTwoPane;
     protected ArrayList<Agenda> agendas;
+
+    @BindView(R.id.progress_bar)
+    ProgressBar mProgressBar;
+
+    @BindView(R.id.NotFoundLayout)
+    FrameLayout NotFoundLayout;
+
+    @OnClick(R.id.retryButton)
+    public void onButtonClick(View view) {
+
+
+        NotFoundLayout.setVisibility(View.GONE);
+        mProgressBar.setVisibility(View.VISIBLE);
+        new LoadAgendaTask().execute();
+
+    }
+
     private class LoadAgendaTask extends AsyncTask<String, Void, ArrayList<Agenda>> {
-        /** The system calls this to perform work in a worker thread and
-         * delivers it the parameters given to AsyncTask.execute() */
+        /**
+         * The system calls this to perform work in a worker thread and
+         * delivers it the parameters given to AsyncTask.execute()
+         */
         protected ArrayList<Agenda> doInBackground(String... urls) {
             AgendasTable agendasTable = new AgendasTable();
-            return agendasTable.getAll(Agenda.class);
+            try {
+                return agendasTable.getAll(Agenda.class);
+            } catch (Resources.NotFoundException e) {
+                return null;
+            }
         }
 
-        /** The system calls this to perform work in the UI thread and delivers
-         * the result from doInBackground() */
+        /**
+         * The system calls this to perform work in the UI thread and delivers
+         * the result from doInBackground()
+         */
         protected void onPostExecute(ArrayList<Agenda> result) {
-            agendas = result;
 
-            View recyclerView = findViewById(R.id.agenda_list);
-            assert recyclerView != null;
-            setupRecyclerView((RecyclerView) recyclerView);
+            if (result == null) {
+                mProgressBar.setVisibility(View.GONE);
+                NotFoundLayout.setVisibility(View.VISIBLE);
+            } else {
+                agendas = result;
 
-            if (findViewById(R.id.agenda_detail_container) != null) {
-                // The detail container view will be present only in the
-                // large-screen layouts (res/values-w900dp).
-                // If this view is present, then the
-                // activity should be in two-pane mode.
-                mTwoPane = true;
+                View recyclerView = findViewById(R.id.agenda_list);
+                assert recyclerView != null;
+                setupRecyclerView((RecyclerView) recyclerView);
+
+
+                mProgressBar.setVisibility(View.GONE);
+                recyclerView.setVisibility(View.VISIBLE);
+
+                if (findViewById(R.id.agenda_detail_container) != null) {
+                    // The detail container view will be present only in the
+                    // large-screen layouts (res/values-w900dp).
+                    // If this view is present, then the
+                    // activity should be in two-pane mode.
+                    mTwoPane = true;
+                }
             }
+
 
         }
     }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_agenda_list);
         navigationStart();
+        ButterKnife.bind(this);
         new LoadAgendaTask().execute();
 
 
@@ -116,8 +160,8 @@ public class AgendaListActivity extends BaseAppCompatActivity {
             System.out.println(holder.mItem.id);
             holder.mtitleView.setText(mValues.get(position).party.title);
 
-            String price = String.format( "%.2f", mValues.get(position).price );
-            String price_height = String.format( "%.2f", mValues.get(position).price_height );
+            String price = String.format("%.2f", mValues.get(position).price);
+            String price_height = String.format("%.2f", mValues.get(position).price_height);
             if (!price.equals("0.00")) {
                 if (!price_height.equals("0.00")) {
                     price = "€" + price + " - €" + price_height;

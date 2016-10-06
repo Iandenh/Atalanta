@@ -1,5 +1,7 @@
 package nl.fa5t.test.app.Model.Table;
 
+import android.content.res.Resources;
+
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -27,6 +29,9 @@ abstract public class Table<T> {
     public ArrayList<T> getAll(Class<T> model) {
         String result = client.get(plural + ".json");
 
+        if(result == null){
+            throw new Resources.NotFoundException("Not Found");
+        }
         try {
             JSONObject o = new JSONObject(result);
             JSONArray a = o.getJSONArray(this.getClass().getSimpleName().replace("Table", "").toLowerCase());
