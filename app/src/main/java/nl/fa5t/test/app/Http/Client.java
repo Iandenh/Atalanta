@@ -12,6 +12,8 @@ import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
+import nl.fa5t.test.app.Constants;
+
 /**
  * Created by ian on 14-9-16.
  */
@@ -21,7 +23,7 @@ public class Client {
 
     public String get(String url) {
         try {
-            return downloadUrl(this.url+'/'+apiVersion+'/'+url);
+            return downloadUrl(Constants.URL+'/'+Constants.API+'/'+url);
         } catch (IOException e) {
             e.printStackTrace();
             return null;
