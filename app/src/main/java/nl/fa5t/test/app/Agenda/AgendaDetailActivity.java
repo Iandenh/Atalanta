@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.app.ActionBar;
 import android.support.v4.app.NavUtils;
 import android.view.MenuItem;
@@ -21,7 +20,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import nl.fa5t.test.app.BaseAppCompatActivity;
 import nl.fa5t.test.app.Gallery.GalleryActivity;
-import nl.fa5t.test.app.Model.Entity.Agenda;
+import nl.fa5t.test.app.Model.Agenda;
 import nl.fa5t.test.app.R;
 
 /**

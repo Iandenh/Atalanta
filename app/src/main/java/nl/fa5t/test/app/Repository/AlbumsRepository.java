@@ -1,6 +1,6 @@
 package nl.fa5t.test.app.Repository;
 
-import nl.fa5t.test.app.Model.Entity.Album;
+import nl.fa5t.test.app.Model.Album;
 
 /**
  * Created by ian on 5-10-16.

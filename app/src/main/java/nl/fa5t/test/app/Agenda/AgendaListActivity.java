@@ -24,7 +24,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import nl.fa5t.test.app.BaseAppCompatActivity;
-import nl.fa5t.test.app.Model.Entity.Agenda;
+import nl.fa5t.test.app.Model.Agenda;
 import nl.fa5t.test.app.Repository.AgendasRepository;
 import nl.fa5t.test.app.R;
 
