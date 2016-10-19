@@ -1,4 +1,4 @@
-package nl.fa5t.test.app.Model.Entity;
+package nl.fa5t.test.app.Model;
 
 import android.os.Parcel;
 import android.os.Parcelable;

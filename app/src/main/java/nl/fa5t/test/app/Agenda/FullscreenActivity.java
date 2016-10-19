@@ -10,7 +10,7 @@ import com.bumptech.glide.Glide;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import nl.fa5t.test.app.Model.Entity.Agenda;
+import nl.fa5t.test.app.Model.Agenda;
 import nl.fa5t.test.app.R;
 
 /**

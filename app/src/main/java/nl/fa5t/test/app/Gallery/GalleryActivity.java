@@ -40,8 +40,8 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import nl.fa5t.test.app.Agenda.AgendaListActivity;
 import nl.fa5t.test.app.BaseAppCompatActivity;
-import nl.fa5t.test.app.Model.Entity.Album;
-import nl.fa5t.test.app.Model.Entity.Image;
+import nl.fa5t.test.app.Model.Album;
+import nl.fa5t.test.app.Model.Image;
 import nl.fa5t.test.app.Repository.AlbumsRepository;
 import nl.fa5t.test.app.R;
 
