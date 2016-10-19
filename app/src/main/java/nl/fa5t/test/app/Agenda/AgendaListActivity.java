@@ -8,7 +8,6 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
@@ -26,7 +25,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import nl.fa5t.test.app.BaseAppCompatActivity;
 import nl.fa5t.test.app.Model.Entity.Agenda;
-import nl.fa5t.test.app.Model.Table.AgendasTable;
+import nl.fa5t.test.app.Repository.AgendasRepository;
 import nl.fa5t.test.app.R;
 
 /**
@@ -68,9 +67,9 @@ public class AgendaListActivity extends BaseAppCompatActivity {
          * delivers it the parameters given to AsyncTask.execute()
          */
         protected ArrayList<Agenda> doInBackground(String... urls) {
-            AgendasTable agendasTable = new AgendasTable();
+            AgendasRepository agendasRepository = new AgendasRepository();
             try {
-                return agendasTable.getAll(Agenda.class);
+                return agendasRepository.getAll();
             } catch (Resources.NotFoundException e) {
                 return null;
             }

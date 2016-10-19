@@ -19,7 +19,7 @@ import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
 
 import nl.fa5t.test.app.Model.Entity.Agenda;
-import nl.fa5t.test.app.Model.Table.AgendasTable;
+import nl.fa5t.test.app.Repository.AgendasRepository;
 import nl.fa5t.test.app.R;
 
 /**
@@ -83,8 +83,8 @@ public class AgendaDetailFragment extends Fragment {
          * delivers it the parameters given to AsyncTask.execute()
          */
         protected Agenda doInBackground(Integer... id) {
-            AgendasTable agendasTable = new AgendasTable();
-            return agendasTable.get(id[0], Agenda.class);
+            AgendasRepository agendasRepository = new AgendasRepository();
+            return agendasRepository.get(id[0]);
         }
 
         /**

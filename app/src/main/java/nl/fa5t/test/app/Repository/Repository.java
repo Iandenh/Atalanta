@@ -1,4 +1,4 @@
-package nl.fa5t.test.app.Model.Table;
+package nl.fa5t.test.app.Repository;
 
 import android.content.res.Resources;
 
@@ -16,17 +16,17 @@ import nl.fa5t.test.app.Http.Client;
 /**
  * Created by ian on 14-9-16.
  */
-abstract public class Table<T> {
+abstract public class Repository<T> {
+    protected Class<T> model;
     protected Client client;
-    protected String plural = this.getClass().getSimpleName().replace("Table", "").toLowerCase();
+    protected String plural = this.getClass().getSimpleName().replace("Repository", "").toLowerCase();
     protected String singular;
 
-    public Table() {
+    public Repository() {
         client = new Client();
-
     }
 
-    public ArrayList<T> getAll(Class<T> model) {
+    public ArrayList<T> getAll() {
         String result = client.get(plural + ".json");
 
         if(result == null){
@@ -34,7 +34,7 @@ abstract public class Table<T> {
         }
         try {
             JSONObject o = new JSONObject(result);
-            JSONArray a = o.getJSONArray(this.getClass().getSimpleName().replace("Table", "").toLowerCase());
+            JSONArray a = o.getJSONArray(this.getClass().getSimpleName().replace("Repository", "").toLowerCase());
             Gson gson = new Gson();
 
             ArrayList<T> list = new ArrayList<>();
@@ -53,7 +53,7 @@ abstract public class Table<T> {
 
     }
 
-    public T get(int id, Class<T> model) {
+    public T get(int id) {
         String result = client.get(plural + "/view/" + id + ".json");
         try {
             JSONObject o = new JSONObject(result);

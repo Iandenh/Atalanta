@@ -1,6 +1,5 @@
 package nl.fa5t.test.app.Gallery;
 
-import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
@@ -11,7 +10,6 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.NavUtils;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.graphics.Palette;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -40,15 +38,11 @@ import java.util.ArrayList;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import nl.fa5t.test.app.Agenda.AgendaDetailActivity;
-import nl.fa5t.test.app.Agenda.AgendaDetailFragment;
 import nl.fa5t.test.app.Agenda.AgendaListActivity;
 import nl.fa5t.test.app.BaseAppCompatActivity;
-import nl.fa5t.test.app.Model.Entity.Agenda;
 import nl.fa5t.test.app.Model.Entity.Album;
 import nl.fa5t.test.app.Model.Entity.Image;
-import nl.fa5t.test.app.Model.Table.AgendasTable;
-import nl.fa5t.test.app.Model.Table.AlbumsTable;
+import nl.fa5t.test.app.Repository.AlbumsRepository;
 import nl.fa5t.test.app.R;
 
 import com.squareup.picasso.Callback;
@@ -105,9 +99,9 @@ public class GalleryActivity extends BaseAppCompatActivity implements ImageGalle
          * delivers it the parameters given to AsyncTask.execute()
          */
         protected ArrayList<Album> doInBackground(String... urls) {
-            AlbumsTable albumsTable = new AlbumsTable();
+            AlbumsRepository albumsRepository = new AlbumsRepository();
             try {
-                return albumsTable.getAll(Album.class);
+                return albumsRepository.getAll();
             } catch (Resources.NotFoundException e) {
                 return null;
             }
